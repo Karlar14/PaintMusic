@@ -120,7 +120,7 @@ void printTable()
 {
 
     Serial.println("TABLE");
-    for(int i=0; i<6; i++)
+    for(int i=0; i<6e; i++)
     {
         for(int j=0; j<6; j++)
         {
@@ -128,7 +128,7 @@ void printTable()
             
             else Serial.println(String(sensedPoints[i][j]));
         }
-//        //if(i == 5) Serial.println("\n-------------------\n");
+        //if(i == 5) Serial.println("\n-------------------\n");
     }
     
 }

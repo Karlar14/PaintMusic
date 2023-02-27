@@ -7,10 +7,6 @@ String[] splitString;
 
 int deviceNumber = 10;
 
-
-
-
-
 void setup() {
   size(200, 200);
   noStroke();
@@ -25,7 +21,7 @@ void draw (){
     String buffer = myPort.readString();
       if (buffer == "TABLE"){
           println("tableFound");
-      
+        
       }
   }
   
