@@ -28,6 +28,7 @@ boolean reset = true;
 
 boolean b1 = true;
 boolean b2 = false;
+boolean b4 = false;
 OscP5 oscP5;
 /* a NetAddress contains the ip address and port number of a remote location in the network. */
 NetAddress myBroadcastLocation; 
@@ -39,17 +40,21 @@ String frame = "Menu";
 PImage Title;
 PImage Page;
 PImage Canvas;
+PImage HT;
+PImage B3;
 
 void setup(){
   background(255);
   frameRate(100);
   size(1000,850);
+  //size(400,400);
   textAlign(CENTER);
   textSize(24);
 
   Title = loadImage("Big.png");
   Page = loadImage("page2.png");
   Canvas = loadImage("CANVAS.png");
+  HT = loadImage("HT.png");
   
   //touch osc 
    /* create a new instance of oscP5. 
@@ -71,12 +76,17 @@ void setup(){
 
 void draw(){
   if(frame == "Menu"){
-     image(Title,0,0,1000,850);
+    image(Title,0,0,1000,850);
   }
   else if(frame == "Page"){
    image(Page,0,0,1000,850);
   }
-  else if(frame == "Canvas"){
+  else if(frame == "HT"){
+    image(HT,0,0,1000,850);
+  }
+   else if(frame == "Canvas"){
+    //image(Canvas,0,0,1000,850);
+  
     if(first){
       image(Canvas,0,0,1000,850);
       first = false;
@@ -87,7 +97,7 @@ void draw(){
     }
     if(reset){
         reset = false; // it can't loop  // reset does it once
-        image(Canvas,0,0,1000,800);
+        image(Canvas,0,0,1000,850);
         oscX = 0;
         oscY = 0;
       }
@@ -99,11 +109,11 @@ void draw(){
         else if(b2){
           brush2();
         }
+        else if(b4){
+          brush4();
+        }
       }
-   
-     
-   
-    
+  
   }
   
     
@@ -113,7 +123,11 @@ void draw(){
 void mousePressed(){
   if(frame == "Menu"){
       frame = "Page";
-  }else if(frame == "Canvas"){
+  }else if(frame == "Page"){
+      frame = "HT";
+      //brush();
+  }
+  else if(frame == "HT"){
       frame = "Canvas";
       brush();
   }
@@ -135,13 +149,9 @@ void oscEvent(OscMessage theOscMessage) {
      if (f){
        f = false;
        pOscX = oscX;
-       pOscY = oscY;
-       
+       pOscY = oscY; 
      }
-     int noteX = int(map(oscX, 0, width,12,110));
-     //int noteY = int(map(oscY, 0, height,12,110));
-     int dynamic = int(map(oscY, 0, height,12,110));
-     sc.playNote(noteX, dynamic, .25);
+    
      //float notes [] = {noteX, noteY};
      //sc.playChords(notes, 100, .25);
       
@@ -149,6 +159,37 @@ void oscEvent(OscMessage theOscMessage) {
      
   } 
 }
+
+void music(){
+      sc.instrument(12);
+     int noteX = int(map(oscX, 0, width,12,110));
+     //int noteY = int(map(oscY, 0, height,12,110));
+     int dynamic = int(map(oscY, 0, height,12,110));
+     sc.playNote(noteX, dynamic, 2.0); //
+}
+
+void music2(){
+    sc.instrument(0);
+     int pitch1 = int(map(oscX, 0, width,12,110));
+     ////int noteY = int(map(oscY, 0, height,12,110));
+     int pitch2 = int(map(oscY, 0, height,12,110));
+     //sc.playNote(noteX,dynamic, .5); //
+     //sc.playPhrase(noteX,20,4);
+     float [] pitches = {pitch1,pitch2};
+     
+     sc.playChord(pitches,100,1.5);
+}
+void music3(){
+    sc.instrument(50);
+     int pitch1 = int(map(oscX, 0, width,12,110));
+     int pitch2 = int(map(oscY, 0, height,12,110));
+     //int dynamic = int(map(oscY, 0, height,12,110));
+     //sc.playNote(noteX,dynamic, .5); //
+     //sc.playPhrase(noteX,20,4);
+     float [] pitches = {pitch1,pitch2};
+     sc.playChord(pitches,100,1.5);
+}
+
 
 void brush(){
   if(true){
@@ -171,25 +212,14 @@ void brush(){
       if(pOscY != oscY)
       pOscY = oscY;
   }
+  music();
 }
-void keyPressed(){
-         if(key == 'r'){
-            reset = true;
-        }
-        if (key == 'b'){
-             b1 = true;
-             b2 = false;
-        }
-        if(key == 'c'){
-            b2 = true;
-            b1 = false;
-        }
-}
+
 
 void brush2(){
   if(true){
     
-    
+    //sc.instrument(117);
       print(oscX);
       print(", ");
       print(oscY);
@@ -206,11 +236,12 @@ void brush2(){
       if(pOscX != oscX)pOscX = oscX;
       if(pOscY != oscY)pOscY = oscY;
   }
+  music2();
 }
 void brush3(){
   if(true){
     
-    
+      
       print(oscX);
       print(", ");
       print(oscY);
@@ -228,4 +259,58 @@ void brush3(){
       if(pOscY != oscY)
       pOscY = oscY;
   }
+  
+}
+void brush4(){
+  
+
+    if(true){
+       B3 = loadImage("p1.png");
+      
+      print(oscX);
+      print(", ");
+      print(oscY);
+      print(", ");
+      print(pOscX);
+      print(", ");
+      println(pOscY);
+      //fill(r,g,b,a);
+      // noStroke();
+      r = random(255);  
+      g = random(255);
+      b = random(255);
+      a = random(255);
+       tint(r, g, b); 
+      if(oscX != 0 || oscY != 0 ){
+        //rect(oscX, oscY, pOscX/3, pOscY/3);
+        image(B3,oscX, oscY, pOscX/3, pOscY/3);
+      }
+      if(pOscX != oscX)
+      pOscX = oscX;
+      if(pOscY != oscY)
+      pOscY = oscY;
+  }
+  music3();
+}
+//}
+
+void keyPressed(){
+         if(key == 'r'){
+            reset = true;
+        }
+        if (key == '1'){
+             b1 = true;
+             b2 = false;
+             b4 = false;
+        }
+        if(key == '2'){
+            b2 = true;
+            b1 = false;
+            b4 = false;
+        }
+        if(key == '3'){
+            b4 = true;
+            b1 = false;
+            b2 = false;
+        }
 }
